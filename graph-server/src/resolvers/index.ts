@@ -1,7 +1,13 @@
-import { getAllAuthors } from "./author";
+import { addAuthorResolver, getAuthorsResolver } from "./author";
 
 export const resolvers = {
     Query: {
-      authors: async () => getAllAuthors()
+      authors: getAuthorsResolver
     },
+    Mutation: {
+      author: () => ({})
+    },
+    MutationAuthor: {
+      add: addAuthorResolver
+    }    
 };

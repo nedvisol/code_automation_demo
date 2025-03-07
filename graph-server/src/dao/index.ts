@@ -1,6 +1,6 @@
 import * as sqlite3 from 'sqlite3';
 
-var db = null;
+var db:sqlite3.Database = null;
 
 export const getDb = () => {
 

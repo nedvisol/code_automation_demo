@@ -1,14 +1,18 @@
-import { Author } from '../generated/graphql';
+import { Author, AuthorAddInput } from '../generated/graphql';
 import {getDb} from './index';
+import crypto from 'crypto';
+import { v4 as uuidv4 } from 'uuid';
 
-export const createAuthor = (author: Author) => {
+
+export const createAuthor = (author: AuthorAddInput):Promise<string> => {
     const db = getDb();
+    const generatedId = crypto.randomUUID();
     return new Promise((resolve, reject) => {
-        db.run("INSERT INTO AUTHOR (ID, NAME, RATING) VALUES (?, ?, ?)", [author.id, author.name, author.rating], function(err) {
+        db.run("INSERT INTO AUTHOR (ID, NAME, RATING) VALUES (?, ?, ?)", [generatedId, author.name, author.rating], function(err) {
             if (err) {
                 reject(err);
             } else {
-                resolve(this.lastID);
+                resolve(generatedId);
             }
         });
     });
@@ -17,17 +21,31 @@ export const createAuthor = (author: Author) => {
 export const getAuthors = async ():Promise<Author[]> => {
     const db = getDb();
     return new Promise((resolve, reject) => {
-        db.all("SELECT * FROM AUTHOR", (err, rows) => {
+        db.all<Author>("SELECT * FROM AUTHOR", (err, rows) => {
             if (err) {
                 reject(err);
             } else {
-                resolve(rows as Author[]);
+                resolve(rows);
             }
         });
     });
 }
 
-export const updateAuthor = (author: Author) => { 
+export const getAuthorsById = async (id: string):Promise<Author> => {
+    const db = getDb();
+    return new Promise((resolve, reject) => {
+        db.all<Author>("SELECT * FROM AUTHOR WHERE ID=?", [id], (err, rows) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(rows[0]);
+            }
+        });
+    });
+}
+
+
+export const updateAuthor = (author: AuthorAddInput) => { 
     const db = getDb();
     return new Promise((resolve, reject) => {
         db.run("UPDATE AUTHOR SET NAME = ?, RATING = ? WHERE ID = ?", [author.name, author.rating, author.id], function(err) {
