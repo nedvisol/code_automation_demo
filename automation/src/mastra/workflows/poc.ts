@@ -1,24 +1,24 @@
 import { Workflow } from "@mastra/core/workflows";
 import { z } from "zod";
-import { updateGraphqlSchemaStep } from "./graphql-steps";
+import { createResolverFunctions, updateGraphqlSchemaStep, updateResolverIndex } from "./graphql-steps";
+import { createDaoFunctions } from "./dao-steps";
 
 const pocWorkflow = new Workflow({
     name: "poc-workflow",
     triggerSchema: z.object({
         entityDescription: z.string(),
         existingSchemaContent: z.string(),
+        sampleDaoContent: z.string(),
+        sampleResolverContent: z.string(),
+        existingResolverObjectContent: z.string(),
     }),
 });
 
 pocWorkflow
-    .step(updateGraphqlSchemaStep);
-// .then(askAboutSpecialty, {
-//   when: { "gatherCandidateInfo.isTechnical": true },
-// })
-// .after(gatherCandidateInfo)
-// .step(askAboutRole, {
-//   when: { "gatherCandidateInfo.isTechnical": false },
-// });
+    .step(updateGraphqlSchemaStep)
+    .then(createDaoFunctions)
+    .then(createResolverFunctions)
+    .then(updateResolverIndex);
 
 pocWorkflow.commit();
 
