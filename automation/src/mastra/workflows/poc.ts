@@ -9,7 +9,9 @@ const pocWorkflow = new Workflow({
         entityDescription: z.string(),
         existingSchemaContent: z.string(),
         sampleDaoContent: z.string(),
+        sampleDaoFilePath: z.string(),
         sampleResolverContent: z.string(),
+        sampleResolverFilePath: z.string(),
         existingResolverObjectContent: z.string(),
     }),
 });

@@ -5,6 +5,7 @@ import { graphqlAgent } from '../agents/graphql-agent';
 interface CreateDaoFunctionsInput {
     entityDescription: string;
     sampleDaoContent: string;
+    sampleDaoFilePath: string;
 }
 
 export const createDaoFunctions = new Step({
@@ -12,14 +13,17 @@ export const createDaoFunctions = new Step({
     inputSchema: z.object({
       entityDescription: z.string(),  
       sampleDaoContent: z.string(),
+      sampleDaoFilePath: z.string(),
     }),
     outputSchema: z.object({
-      generatedDaoFile: z.string(),            
+      generatedDaoFile: z.string(), 
+      recommendedDaoPath: z.string(),           
     }),
     execute: async ({ context }:any) => {
       const triggerResult = context?.getStepResult("trigger") as CreateDaoFunctionsInput;
       const entityDescription = triggerResult?.entityDescription;
       const sampleDaoContent = triggerResult?.sampleDaoContent;
+      const sampleDaoFilePath = triggerResult?.sampleDaoFilePath;
    
       const prompt = `
             The objective is generate data access functions for the new entity defined by the detail below:
@@ -30,11 +34,16 @@ export const createDaoFunctions = new Step({
             ${sampleDaoContent}
             \`\`\`
             -----------------------------
+
+            In addition, make a recommendation for the file name and path for this new data access functions file.
+            The recommended path should be be similar to the following:
+            ${sampleDaoFilePath}
           `;
    
       const res = await graphqlAgent.generate(prompt, {
         output: z.object({
-            generatedDaoFile: z.string(),            
+            generatedDaoFile: z.string(),   
+            recommendedDaoPath: z.string(),         
         }),
       });
    

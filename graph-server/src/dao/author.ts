@@ -1,8 +1,6 @@
 import { Author, AuthorAddInput } from '../generated/graphql';
 import {getDb} from './index';
 import crypto from 'crypto';
-import { v4 as uuidv4 } from 'uuid';
-
 
 export const createAuthor = (author: AuthorAddInput):Promise<string> => {
     const db = getDb();
@@ -31,7 +29,7 @@ export const getAuthors = async ():Promise<Author[]> => {
     });
 }
 
-export const getAuthorsById = async (id: string):Promise<Author> => {
+export const getAuthorById = async (id: string):Promise<Author> => {
     const db = getDb();
     return new Promise((resolve, reject) => {
         db.all<Author>("SELECT * FROM AUTHOR WHERE ID=?", [id], (err, rows) => {

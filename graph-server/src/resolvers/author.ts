@@ -1,5 +1,5 @@
 import { Author, MutationAuthorResolvers, MutationResolvers, QueryResolvers } from "../generated/graphql";
-import { createAuthor, getAuthors, getAuthorsById } from '../dao/author';
+import { createAuthor, getAuthors, getAuthorById } from '../dao/author';
 
 export const getAuthorsResolver:QueryResolvers['authors'] = async () => {
   return await getAuthors();
@@ -10,5 +10,5 @@ export const addAuthorResolver:MutationAuthorResolvers['add'] = async (parent, a
 
   const id = await createAuthor(input);
 
-  return await getAuthorsById(id);
+  return await getAuthorById(id);
 };

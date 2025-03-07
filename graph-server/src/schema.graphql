@@ -1,33 +1,30 @@
+# This "Author" type defines the queryable fields for every author in our data source.
+type Author {
+  id: String
+  name: String!
+  rating: Float    
+}
 
+input AuthorAddInput {
+  id: String
+  name: String!    
+  rating: Float
+}  
 
-  # This "Author" type defines the queryable fields for every author in our data source.
-  type Author {
-    id: String
-    name: String!
-    rating: Float    
-  }
+type Query {
+  # Get all authors
+  authors: [Author!],
 
-  input AuthorAddInput {
-    id: String
-    name: String!    
-    rating: Float
-  }  
+  # Get author by id
+  author(id: String!): Author,
+}
 
-  type Query {
+type Mutation {
+  author(id: String): MutationAuthor
+}
 
-    # Get all authors
-    authors: [Author!],
-
-    # Get author by id
-    author(id: String!): Author
-  }
-
-  type Mutation {
-    author(id: String): MutationAuthor
-  }
-
-  type MutationAuthor {
-        add(param: AuthorAddInput!): Author!
-        update(param: AuthorAddInput!): Author!
-        delete: Boolean
-  }
+type MutationAuthor {
+      add(param: AuthorAddInput!): Author!
+      update(param: AuthorAddInput!): Author!
+      delete: Boolean
+}

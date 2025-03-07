@@ -53,6 +53,7 @@ export const updateGraphqlSchemaStep = new Step({
 interface createResolverFunctionsInput {
   entityDescription: string;
   sampleResolverContent: string;
+  sampleResolverFilePath: string;
 }
 
 export const createResolverFunctions = new Step({
@@ -68,6 +69,7 @@ export const createResolverFunctions = new Step({
       const triggerResult:createResolverFunctionsInput = context?.getStepResult("trigger");
       const entityDescription = triggerResult?.entityDescription;
       const sampleResolverContent = triggerResult?.sampleResolverContent;
+      const sampleResolverFilePath = triggerResult?.sampleResolverFilePath;
    
       const prompt = `
             The objective is to generate GraphQL resolver functions for the new entity defined by the detail below:
@@ -78,11 +80,15 @@ export const createResolverFunctions = new Step({
             ${sampleResolverContent}
             \`\`\`
             -----------------------------
+            In addition, make a recommendation for the file name and path for this resolver functions file.
+            The recommended path should be be similar to the following:
+            ${sampleResolverFilePath}
           `;
    
       const res = await graphqlAgent.generate(prompt, {
         output: z.object({
-          generatedResolverContent: z.string(),            
+          generatedResolverContent: z.string(),
+          recommendedResolverPath: z.string(),            
         }),
       });
    
