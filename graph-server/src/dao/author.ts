@@ -2,18 +2,9 @@ import { Author, AuthorAddInput } from '../generated/graphql';
 import {getDb} from './index';
 import crypto from 'crypto';
 
-export const createAuthor = (author: AuthorAddInput):Promise<string> => {
+export const initAuthorTable = () => {
     const db = getDb();
-    const generatedId = crypto.randomUUID();
-    return new Promise((resolve, reject) => {
-        db.run("INSERT INTO AUTHOR (ID, NAME, RATING) VALUES (?, ?, ?)", [generatedId, author.name, author.rating], function(err) {
-            if (err) {
-                reject(err);
-            } else {
-                resolve(generatedId);
-            }
-        });
-    });
+    db.run("CREATE TABLE AUTHOR (ID VARCHAR(50), NAME VARCHAR(200), RATING NUMBER(2,1));");
 }
 
 export const getAuthors = async ():Promise<Author[]> => {
@@ -42,6 +33,19 @@ export const getAuthorById = async (id: string):Promise<Author> => {
     });
 }
 
+export const createAuthor = (author: AuthorAddInput):Promise<string> => {
+    const db = getDb();
+    const generatedId = crypto.randomUUID();
+    return new Promise((resolve, reject) => {
+        db.run("INSERT INTO AUTHOR (ID, NAME, RATING) VALUES (?, ?, ?)", [generatedId, author.name, author.rating], function(err) {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(generatedId);
+            }
+        });
+    });
+}
 
 export const updateAuthor = (author: AuthorAddInput) => { 
     const db = getDb();

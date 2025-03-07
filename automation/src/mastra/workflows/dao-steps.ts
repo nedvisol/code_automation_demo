@@ -8,8 +8,8 @@ interface CreateDaoFunctionsInput {
     sampleDaoFilePath: string;
 }
 
-export const createDaoFunctions = new Step({
-    id: "createDaoFunctions",
+export const createDaoFunctionsStep = new Step({
+    id: "createDaoFunctionsStep",
     inputSchema: z.object({
       entityDescription: z.string(),  
       sampleDaoContent: z.string(),

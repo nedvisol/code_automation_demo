@@ -9,7 +9,7 @@ interface updateGraphqlSchemaStepInput {
 
 
 export const updateGraphqlSchemaStep = new Step({
-    id: "updateGraphqlSchema",
+    id: "updateGraphqlSchemaStep",
     inputSchema: z.object({
       entityDescription: z.string(),  
       existingSchemaContent: z.string(),
@@ -56,8 +56,8 @@ interface createResolverFunctionsInput {
   sampleResolverFilePath: string;
 }
 
-export const createResolverFunctions = new Step({
-    id: "createResolverFunctions",
+export const createResolverFunctionsStep = new Step({
+    id: "createResolverFunctionsStep",
     inputSchema: z.object({
       entityDescription: z.string(),  
       sampleResolverContent: z.string(),
@@ -101,8 +101,8 @@ interface updateResolverIndexInput {
   existingResolverObjectContent: string;
 }
 
-export const updateResolverIndex = new Step({
-    id: "updateResolverIndex",
+export const updateResolverIndexStep = new Step({
+    id: "updateResolverIndexStep",
     inputSchema: z.object({
       entityDescription: z.string(),  
       existingResolverObjectContent: z.string(),

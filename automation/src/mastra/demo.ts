@@ -1,15 +1,15 @@
 import { Mastra } from "@mastra/core/mastra";
-import { pocWorkflow } from "./workflows/poc";
+import { demoWorkflow } from "./workflows/demo";
 import fs from 'fs';
 import { createBackup } from "./util";
 
 const mastra = new Mastra({
     workflows: {
-        pocWorkflow,
+        demoWorkflow,
     },
 });
 
-type PocWorkflowRunParams = {
+type DemoWorkflowRunParams = {
     entityDescriptionFile: string;
     existingSchemaFile: string;
     sampleDaoFilePath: string;
@@ -17,8 +17,8 @@ type PocWorkflowRunParams = {
     existingResolverObjectFile: string;
 }
 
-const pocWorkflowRun = async (params: PocWorkflowRunParams) => {
-    const { runId, start } = mastra.getWorkflow("pocWorkflow").createRun();
+const demoWorkflowRun = async (params: DemoWorkflowRunParams) => {
+    const { runId, start } = mastra.getWorkflow("demoWorkflow").createRun();
 
     console.log("Run", runId);
     const entityDescription = fs.readFileSync(params.entityDescriptionFile, "utf-8");
@@ -40,27 +40,32 @@ const pocWorkflowRun = async (params: PocWorkflowRunParams) => {
     });
 
     console.log("Final output:", runResult.results);
-    const { updateGraphqlSchema, createDaoFunctions, createResolverFunctions, updateResolverIndex} = runResult.results as any;    
+    const { 
+        updateGraphqlSchemaStep, 
+        createDaoFunctionsStep, 
+        createResolverFunctionsStep, 
+        updateResolverIndexStep,
+    } = runResult.results as any;    
     createBackup(params.existingSchemaFile);
-    fs.writeFileSync(params.existingSchemaFile, updateGraphqlSchema.output.updatedSchemaContent);
+    fs.writeFileSync(params.existingSchemaFile, updateGraphqlSchemaStep.output.updatedSchemaContent);
 
 
-    const generatedDaoContent = createDaoFunctions.output.generatedDaoFile;
-    const recommendedDaoPath = createDaoFunctions.output.recommendedDaoPath;
+    const generatedDaoContent = createDaoFunctionsStep.output.generatedDaoFile;
+    const recommendedDaoPath = createDaoFunctionsStep.output.recommendedDaoPath;
     fs.writeFileSync(recommendedDaoPath, generatedDaoContent);
 
-    const generatedResolverContent = createResolverFunctions.output.generatedResolverContent;
-    const recommendedResolverPath = createResolverFunctions.output.recommendedResolverPath;
+    const generatedResolverContent = createResolverFunctionsStep.output.generatedResolverContent;
+    const recommendedResolverPath = createResolverFunctionsStep.output.recommendedResolverPath;
     fs.writeFileSync(recommendedResolverPath, generatedResolverContent);
 
-    const updatedResolverObjectContent = updateResolverIndex.output.updatedResolverObjectContent;
+    const updatedResolverObjectContent = updateResolverIndexStep.output.updatedResolverObjectContent;
     createBackup(params.existingResolverObjectFile);
     fs.writeFileSync(params.existingResolverObjectFile, updatedResolverObjectContent);
 
     console.log("Backup files created and updated files written.");
 };
 
-pocWorkflowRun({
+demoWorkflowRun({
     entityDescriptionFile: "../graph-server/automation/book.md",
     existingSchemaFile: "../graph-server/src/schema.graphql",
     sampleDaoFilePath: "../graph-server/src/dao/author.ts",

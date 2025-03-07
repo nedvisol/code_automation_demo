@@ -2,10 +2,10 @@ import { addAuthorResolver, getAuthorsResolver } from "./author";
 
 export const resolvers = {
     Query: {
-      authors: getAuthorsResolver,      
+      authors: getAuthorsResolver,    
     },
     Mutation: {
-      author: () => ({}),      
+      author: () => ({}),
     },
     MutationAuthor: {
       add: addAuthorResolver

@@ -5,11 +5,13 @@ type Author {
   rating: Float    
 }
 
-input AuthorAddInput {
+type Book {
   id: String
-  name: String!    
-  rating: Float
-}  
+  name: String!
+  isbn: String
+  publishedDate: String
+  authorId: String!
+}
 
 type Query {
   # Get all authors
@@ -17,14 +19,15 @@ type Query {
 
   # Get author by id
   author(id: String!): Author,
+
+  # Get all books
+  books: [Book!],
+
+  # Get book by id
+  book(id: String!): Book,
 }
+
 
 type Mutation {
   author(id: String): MutationAuthor
-}
-
-type MutationAuthor {
-      add(param: AuthorAddInput!): Author!
-      update(param: AuthorAddInput!): Author!
-      delete: Boolean
-}
+  book(id: String): Mutati
