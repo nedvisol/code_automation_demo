@@ -2,7 +2,9 @@ import { Author, MutationAuthorResolvers, MutationResolvers, QueryResolvers } fr
 import { createAuthor, getAuthors, getAuthorById } from '../dao/author';
 
 export const getAuthorsResolver:QueryResolvers['authors'] = async () => {
-  return await getAuthors();
+  const results = await getAuthors();
+  console.log(results);
+  return results;
 }
 
 export const addAuthorResolver:MutationAuthorResolvers['add'] = async (parent, args, context, info) => {

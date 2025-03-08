@@ -18,7 +18,7 @@ export const getDb = () => {
 export const initDatabase = () => {    
     //create table for Author
     const _db = getDb();
-    _db.run("CREATE TABLE AUTHOR (ID VARCHAR(50), NAME VARCHAR(200), RATING NUMBER(2,1));");
+    _db.run("CREATE TABLE AUTHOR (id VARCHAR(50), name VARCHAR(200), rating NUMBER(2,1));");
 
     console.log('Database initialized');
 }
