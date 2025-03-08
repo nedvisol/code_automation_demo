@@ -8,11 +8,5 @@ export function createBackup(filePath: string): void {
     if (fs.existsSync(backupFilePath)) {
         throw new Error(`Backup file already exists at: ${backupFilePath}`);
     }
-    fs.copyFile(filePath, backupFilePath, (err) => {
-        if (err) {
-            console.error('Error creating backup file:', err);
-        } else {
-            console.log(`Backup file created at: ${backupFilePath}`);
-        }
-    });
+    fs.copyFileSync(filePath, backupFilePath);
 }
