@@ -1,11 +1,8 @@
 import { Author, AuthorAddInput } from '../generated/graphql';
-import {getDb} from './index';
+import {getDb, addCreateScript} from './index';
 import crypto from 'crypto';
 
-export const initAuthorTable = () => {
-    const db = getDb();
-    db.run("CREATE TABLE AUTHOR (ID VARCHAR(50), NAME VARCHAR(200), RATING NUMBER(2,1));");
-}
+addCreateScript("CREATE TABLE AUTHOR (id VARCHAR(50), name VARCHAR(200), rating NUMBER(2,1));")
 
 export const getAuthors = async ():Promise<Author[]> => {
     const db = getDb();

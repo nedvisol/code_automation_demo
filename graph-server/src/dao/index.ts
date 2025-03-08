@@ -15,11 +15,29 @@ export const getDb = () => {
     return db;
 };
 
-export const initDatabase = () => {    
-    //create table for Author
-    const _db = getDb();
-    _db.run("CREATE TABLE AUTHOR (id VARCHAR(50), name VARCHAR(200), rating NUMBER(2,1));");
 
+const tableCreateScripts:string[] = []
+
+export const addCreateScript = (script:string) => {
+    tableCreateScripts.push(script);
+}
+
+export const initDatabase = () => {    
+    
+    const db = getDb();
+    db.serialize(() => {
+        tableCreateScripts.forEach((script) => {
+            db.run(script, (err) => {
+                if (err) {
+                    console.log('Error creating table', err);
+                } else {
+                    console.log('Table created');
+                }
+            });
+        });
+
+    });
+   
     console.log('Database initialized');
 }
 
